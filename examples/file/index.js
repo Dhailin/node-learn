@@ -1,9 +1,9 @@
-const path = require('path')
+const Path = require('path')
 const fs = require('fs')
 const childProcess = require('child_process')
 
 /**
- * @param dir 文件夹地址
+ * @param {string} dir 文件夹地址
  */
 function getFilePath (dir) {
   return new Promise((resolve, reject) => {
@@ -14,7 +14,7 @@ function getFilePath (dir) {
       }
 
       files = files.map((fileName) => {
-        return path.resolve(dir, fileName)
+        return Path.resolve(dir, fileName)
       })
 
       return resolve(files)
@@ -39,9 +39,25 @@ function walkerFiles (filepathList) {
   })
 }
 
-const fileDirPath = path.resolve(__dirname, 'files')
+function readFile (path) {
+  return new Promise((resolve, reject) => {
+    fs.readFile(path, { encoding: 'utf-8' }, (err, data) => {
+      if (err) {
+        reject(err)
+        throw err
+      }
 
-getFilePath(fileDirPath)
-  .then((filepathList) => {
-    walkerFiles(filepathList)
+      console.log('open', data)
+    })
   })
+}
+
+// 文件夹路径
+const fileDirPath = Path.resolve(__dirname, 'files')
+
+// getFilePath(fileDirPath)
+//   .then((filepathList) => {
+//     walkerFiles(filepathList)
+//   })
+
+readFile(Path.resolve(fileDirPath, 'a.js'))
